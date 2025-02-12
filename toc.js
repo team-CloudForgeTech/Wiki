@@ -8,7 +8,7 @@ class MDBookSidebarScrollbox extends HTMLElement {
         super();
     }
     connectedCallback() {
-        this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><a href="home.html"><strong aria-hidden="true">1.</strong> 首页</a></li><li class="chapter-item expanded "><a href="云锻开源社区.html"><strong aria-hidden="true">2.</strong> 云锻开源社区</a></li><li class="chapter-item expanded "><a href="GCR.html"><strong aria-hidden="true">3.</strong> GCR:CNC-CMD知识共享平台</a></li><li class="chapter-item expanded "><a href="kiteai.html"><strong aria-hidden="true">4.</strong> 风筝Ai</a></li></ol>';
+        this.innerHTML = '<ol class="chapter"><li class="chapter-item expanded "><a href="home.html"><strong aria-hidden="true">1.</strong> 首页</a></li><li class="chapter-item expanded "><a href="云锻开源社区.html"><strong aria-hidden="true">2.</strong> 云锻开源社区</a></li><li class="chapter-item expanded "><a href="GCR.html"><strong aria-hidden="true">3.</strong> GCR:CNC-CMD知识共享平台</a></li><li class="chapter-item expanded "><a href="kiteai.html"><strong aria-hidden="true">4.</strong> 风筝Ai</a></li><li class="chapter-item expanded "><a href="EdgeLogGuard.html"><strong aria-hidden="true">5.</strong> EdgeLogGuard日志管理系统</a></li></ol>';
         // Set the current, active page, and reveal it if it's hidden
         let current_page = document.location.href.toString();
         if (current_page.endsWith("/")) {
