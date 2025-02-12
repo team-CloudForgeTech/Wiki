@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html lang="zh-cn" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>EdgeLogGuard日志管理系统 - 云锻开源|CloudForgeTech-wiki</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">云锻开源|CloudForgeTech-wiki</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <hr />
+<h1 id="edgelogguard-官方文档"><a class="header" href="#edgelogguard-官方文档">EdgeLogGuard 官方文档</a></h1>
+<hr />
+<h2 id="整合架构"><a class="header" href="#整合架构"><strong>整合架构</strong></a></h2>
+<pre><code class="language-mermaid">graph LR
+    subgraph 用户手册
+        A[快速入门] --&gt; B(系统安装)
+        B --&gt; C[功能使用]
+        C --&gt; D[安全与审计]
+        D --&gt; E[故障排查]
+    end
+
+    subgraph 官方文档
+        F[核心架构] --&gt; G(部署与运维)
+        G --&gt; H[智能分析] 
+        H --&gt; I[API与开发]
+    end
+
+    A -.-&gt;|实践指引| F
+    H --&gt;|扩展能力| C
+    G --&gt;|管理工具| E
+</code></pre>
+<hr />
+<h2 id="目录"><a class="header" href="#目录"><strong>目录</strong></a></h2>
+<ol>
+<li><a href="#%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8">快速入门</a></li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84">系统架构</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2">安装部署</a></li>
+<li><a href="#%E7%89%B9%E6%80%A7%E8%AF%A6%E8%A7%A3">特性详解</a></li>
+<li><a href="#%E6%99%BA%E8%83%BD%E5%88%86%E6%9E%90">智能分析</a></li>
+<li><a href="#%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86">运维管理</a></li>
+<li><a href="#%E5%AE%89%E5%85%A8%E5%90%88%E8%A7%84">安全合规</a></li>
+<li><a href="#%E5%BC%80%E5%8F%91%E8%80%85%E5%8F%82%E8%80%83">开发者参考</a></li>
+<li><a href="#%E9%99%84%E5%BD%95">附录</a></li>
+</ol>
+<hr />
+<h3 id="1-快速入门"><a class="header" href="#1-快速入门"><strong>1. 快速入门</strong></a></h3>
+<h4 id="11-三分钟启动整合用户手册"><a class="header" href="#11-三分钟启动整合用户手册">1.1 三分钟启动（整合用户手册）</a></h4>
+<pre><code class="language-bash"># 全功能开发版部署（Docker Compose）
+docker run -d \
+  -p 8080:8080 \
+  -v ${PWD}/config:/etc/elg \
+  edgelogguard/quickstart:latest
+</code></pre>
+<p><strong>操作流程</strong>：</p>
+<ol>
+<li>访问 <code>http://localhost:8080</code> → 完成管理员初始化</li>
+<li>上传预设规则集 <code>Default-Security-Rules.yml</code></li>
+<li>开启自动发现本地日志（支持*/var/log/*路径）</li>
+</ol>
+<hr />
+<h3 id="2-系统架构"><a class="header" href="#2-系统架构"><strong>2. 系统架构</strong></a></h3>
+<h4 id="21-混合云部署"><a class="header" href="#21-混合云部署">2.1 混合云部署</a></h4>
+<pre><code class="language-mermaid">graph TB
+    edge[边缘节点（ARM/工控机）] --&gt; relay[区域中继]
+    relay --&gt; cloud{{中心云平台}}
+    relay --&gt; onprem[本地数据中心]
+
+    subgraph 控制平面
+        cloud ---|策略下发| edge
+        onprem ---|日志回流| cloud
+    end
+</code></pre>
+<hr />
+<h3 id="3-安装部署"><a class="header" href="#3-安装部署"><strong>3. 安装部署</strong></a></h3>
+<h4 id="31-多环境安装矩阵整合用户手册与官方文档"><a class="header" href="#31-多环境安装矩阵整合用户手册与官方文档">3.1 多环境安装矩阵（整合用户手册与官方文档）</a></h4>
+<div class="table-wrapper"><table><thead><tr><th>部署场景</th><th>命令行工具</th><th>Web配置向导支持</th><th>可视化部署检查</th></tr></thead><tbody>
+<tr><td><strong>单节点测试</strong></td><td><code>elg deploy --profile=minimal</code></td><td>✓</td><td>全功能仪表盘</td></tr>
+<tr><td><strong>边缘集群</strong></td><td>Ansible Playbook</td><td>✗</td><td>节点健康面板</td></tr>
+<tr><td><strong>混合云</strong></td><td>Terraform Module</td><td>部分</td><td>跨域拓扑视图</td></tr>
+</tbody></table>
+</div>
+<hr />
+<h3 id="4-特性详解"><a class="header" href="#4-特性详解"><strong>4. 特性详解</strong></a></h3>
+<h4 id="41-全链路日志追踪"><a class="header" href="#41-全链路日志追踪">4.1 全链路日志追踪</a></h4>
+<pre><code class="language-yaml"># 应用链路追踪配置
+tracing:
+  sampling_rate: 0.1  # 采样率
+  exporters: 
+    - type: jaeger
+      endpoint: jaeger:14250
+    - type: elastic
+      index: logs-trace
+</code></pre>
+<h4 id="42-多租户隔离"><a class="header" href="#42-多租户隔离">4.2 多租户隔离</a></h4>
+<pre><code class="language-http">### 创建租户空间（管理员操作）
+POST /api/v1/tenants
+Authorization: Bearer &lt;admin-token&gt;
+
+{
+  "name": "finance-team",
+  "storage_quota": "500GB",
+  "tags": ["PCI-DSS"]
+}
+</code></pre>
+<hr />
+<h3 id="5-智能分析"><a class="header" href="#5-智能分析"><strong>5. 智能分析</strong></a></h3>
+<h4 id="51-威胁情报集成"><a class="header" href="#51-威胁情报集成">5.1 威胁情报集成</a></h4>
+<pre><code class="language-python"># 自动化工单生成（开发参考）
+from edgelogguard.soc import generate_ticket
+
+alert = {
+  "type": "brute_force",
+  "src_ip": "192.168.1.2",
+  "timestamp": "2023-07-29T14:22:00Z"
+}
+
+ticket = generate_ticket(
+   severity="critical",
+   ioc=alert['src_ip'],
+   playbook="block_ip.yaml"
+)
+</code></pre>
+<hr />
+<h3 id="6-运维管理"><a class="header" href="#6-运维管理"><strong>6. 运维管理</strong></a></h3>
+<h4 id="61-混沌工程测试"><a class="header" href="#61-混沌工程测试">6.1 混沌工程测试</a></h4>
+<pre><code class="language-bash"># 模拟节点故障
+elg chaos test --scenario=node-failure \
+    --target=edge-node-05 \
+    --duration=5m
+</code></pre>
+<p><strong>结果诊断</strong>：</p>
+<pre><code class="language-json">{
+  "scenario": "Network Partition",
+  "service_degradation": "23%",
+  "data_loss": "0 records",
+  "recovery_time": "1m22s"
+}
+</code></pre>
+<hr />
+<h3 id="7-安全合规"><a class="header" href="#7-安全合规"><strong>7. 安全合规</strong></a></h3>
+<h4 id="71-凭证生命周期管理"><a class="header" href="#71-凭证生命周期管理">7.1 凭证生命周期管理</a></h4>
+<pre><code class="language-mermaid">journey
+    title 密钥轮换流程
+    section 生产密钥
+      生成新密钥 --&gt; 部署到边缘: 3d
+    section 过渡阶段
+      双密钥运行 --&gt; 监控异常: 7d
+    section 清理
+      回收旧密钥 --&gt; 审计日志: 24h
+</code></pre>
+<hr />
+<h3 id="8-开发者参考"><a class="header" href="#8-开发者参考"><strong>8. 开发者参考</strong></a></h3>
+<h4 id="81-插件开发sdk"><a class="header" href="#81-插件开发sdk">8.1 插件开发SDK</a></h4>
+<pre><code class="language-go">type ProcessorPlugin interface {
+    Process(log core.LogEntry) ([]core.LogEntry, error)
+    ReloadConfig(config []byte) error
+}
+
+// 示例：日志脱敏插件
+type RedactPlugin struct {
+    patterns []regexp.Regexp
+}
+
+func (p *RedactPlugin) Process(log core.LogEntry) ([]core.LogEntry, error) {
+    for _, pattern := range p.patterns {
+        log.Message = pattern.ReplaceAllString(log.Message, "[REDACTED]")
+    }
+    return []core.LogEntry{log}, nil
+}
+</code></pre>
+<hr />
+<h3 id="9-附录"><a class="header" href="#9-附录"><strong>9. 附录</strong></a></h3>
+<h4 id="91-资源规划工具"><a class="header" href="#91-资源规划工具">9.1 资源规划工具</a></h4>
+<p>访问在线计算器：
+<a href="https://elg-calculator.edgelogguard.com">https://elg-calculator.edgelogguard.com</a></p>
+<p><strong>输入参数示例</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>参数</th><th>值</th></tr></thead><tbody>
+<tr><td>日均日志量</td><td>50GB</td></tr>
+<tr><td>保留周期</td><td>180天</td></tr>
+<tr><td>峰值倍数</td><td>3x</td></tr>
+</tbody></table>
+</div>
+<p><strong>输出建议</strong>：</p>
+<div class="table-wrapper"><table><thead><tr><th>资源类型</th><th>规格</th></tr></thead><tbody>
+<tr><td>边缘存储</td><td>3节点，每节点1TB SSD</td></tr>
+<tr><td>分析集群</td><td>4vCPU/16GB × 3节点</td></tr>
+</tbody></table>
+</div>
+<hr />
+<p><strong>文档状态</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>版本</th><th>修订日期</th><th>修订内容</th></tr></thead><tbody>
+<tr><td>2.1</td><td>2023-07-29</td><td>整合用户手册与官方文档</td></tr>
+<tr><td>2.0</td><td>2023-07-28</td><td>原生多云支持</td></tr>
+</tbody></table>
+</div>
+<hr />
+<p>该综合文档实现了：</p>
+<ol>
+<li><strong>操作引导与技术深度的平衡</strong>：用户手册的快速指引融入官方文档各章节</li>
+<li><strong>可视化表达统一性</strong>：Mermaid图覆盖架构、流程、数据关系多维度</li>
+<li><strong>版本迭代关联</strong>：通过"文档状态"追踪更新内容</li>
+<li><strong>多角色适配</strong>：开发者可阅读SDK示例，运维查看混沌工程方法，管理员配置安全策略</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="kiteai.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="kiteai.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
